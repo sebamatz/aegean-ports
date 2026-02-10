@@ -10,6 +10,7 @@ export default function FloatingWhatsApp() {
 
   useEffect(() => {
     const fetchNumber = async () => {
+      if (!client) return; // Skip if Sanity is not configured
       try {
         const data = await client.fetch(contactQuery);
         const waObj = data.find(

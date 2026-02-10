@@ -6,17 +6,20 @@ export function proxy(request: NextRequest) {
   const host = request.headers.get("host");
   let port = getPortByDomain(host);
 
-  // If domain is not mapped → default to jmk
+  // If domain is not mapped → default to JMK (Mykonos)
   if (!port) {
-    port = { key: "jmk" } as any;
+    port = { key: "JMK" } as any;
   }
 
   const url = request.nextUrl.clone();
   const path = url.pathname;
 
-  // If path doesn't already contain airport code → inject it
-  if (!path.startsWith(`/${port.key}`)) {
-    url.pathname = `/${port.key}${path}`;
+  // Normalize the key to uppercase for consistent routing
+  const portKey = port.key.toUpperCase();
+
+  // If path doesn't already contain port code → inject it
+  if (!path.startsWith(`/${portKey}`)) {
+    url.pathname = `/${portKey}${path}`;
     return NextResponse.rewrite(url);
   }
 
